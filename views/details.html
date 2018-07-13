@@ -1,0 +1,12 @@
+<html>
+<body>
+  <h2>Details for {{albumTitle}}</h2>
+  {{#if result}}
+    <li>Artist: {{ result.artist }}
+    <li>Price: {{ result.price }}
+    <li>Quantity: {{ result.qty }}
+  {{else}}
+    not found
+  {{/if}}
+</body>
+</html> 

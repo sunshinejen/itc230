@@ -1,65 +1,60 @@
-var http = require("http"); 
-var fs = require("fs");
-var music = require('./lib/albums');
-var querystring = require('querystring');
+'use strict'
+const music = require('./lib/albums.js');
+const express = require("express");
+const app = express();
+let handlebars = require("express-handlebars");
 
-http.createServer(function(req,res) {
-  var path = req.url.toLowerCase();
-  
-  switch(path) {
-    case '/': 
-        fs.readFile('home.html', function (err, data) {
-            
-           
-           if (err) return console.error(err);
-            res.writeHead(200, {'Content-Type': 'text/html'});
-            res.end(data.toString());
-       
-        });
-        break;
-    case '/about.html':
-        fs.readFile('about.html', function (data) {
-            res.writeHead(200, {'Content-Type': 'text/html'});
-            res.end(data.toString());
-        });
-      break;
-    default:
-      res.writeHead(404, {'Content-Type': 'text/html'});
-      res.end('Not found');
-      break;
-    }
-}).listen(process.env.PORT || 3000);
- 
- case '/get':
-     var result = music.get(music);
-     
-     if(result) {
-         res.writeHead(200, {'Content-Type: 'text/plain'});
-         res.end(result));
-     }else {
-             res.writeHead(200, {'Content-Type' : 'text/plain'});
-             res.end('Item not found');
-         };
-     // code
-     break;
-     
-     
-     case 'delete':
-         var deleteAlbum = music.splice(get(albumTitle));
-         var deleteResult= music.delete(deleteAlbum);
-         
-         if(deleteResult) {
-             res.writeHead(200, {'Content-Type' : 'text/plain'});
-             res.end('Album'+'deleteAlbum'+'has been removed');
-         } else {
-             res.writeHead(200, {'Content-Type' : 'text/plain'});
-             res.end('Album'+'deleteAlbum'+'not found');
-         }
-         break;
-     
- 
- 
 
-console.log(music.getAll());
+app.set('port', process.env.PORT || 3000);
+app.use(express.static(__dirname + '/public')); 
 
-console.log(music.findAlbumTitle());
+app.engine(".html", handlebars({extname: '.html'}));
+app.set("view engine", ".html");
+
+app.get('/', (req, res) => {
+ res.type('text/html');
+ res.sendFile(__dirname + '/public/home.html'); 
+});
+
+app.get('/about', (req, res) => {
+ res.type('text/html');
+res.sendFile(__dirname + '/public/about.html');
+});
+
+
+/*
+ send plain text response
+app.get('/about', (req, res) => {
+ res.type('text/plain');
+ res.send('About page');
+});
+*/
+
+// define 404 handler
+
+
+app.post('/get', (req, res) => {
+  console.log(req.body); // display parsed form submission
+});
+
+
+//send content of home view
+app.get('/', (req, res) => {
+    res.render('home', {music: music.getAll()});
+});
+
+app.get('/get', (req,res) => {
+   let result = music.get(req.query.title.toLowerCase());
+   res.render('details', {albumTitle: req.query.title, result:result})
+});
+
+app.use( (req,res) => {
+ res.type('text/plain'); 
+ res.status(404);
+ res.send('404 - Not found');
+}); 
+
+app.listen(app.get('port'), () => {
+ console.log('Express started'); 
+});
+

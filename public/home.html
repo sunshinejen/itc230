@@ -3,5 +3,16 @@
     <title>Music List</title>
 </head>
 <body> 
+<h2> Music Store</h2>
+<form method="POST" action="/get">
+<input type="text" name="title" placeholder="Search by album title">
+<button>Search</button>
+</form>
+<ul>
+    {{#each albums}}
+    <li>{{result.albumTitle}}</li>
+    {{/each}}
+
+</ul>
 </body> 
 </html>

@@ -1,12 +1,15 @@
 <html>
 <body>
-  <h2>Details for {{albumTitle}}</h2>
+  <h1>Details for {{albumTitle}}</h1>
   {{#if result}}
-    <li>Artist: {{ result.artist }}
-    <li>Price: {{ result.price }}
-    <li>Quantity: {{ result.qty }}
+    <li>Artist: {{result.artist}}</li>
+    <li>Price: {{result.price}}</li>
+    <li>Quantity: {{result.qty}}</li>
+    <p>
+      <a href="/delete?albumTitle={{result.albumTitle}}">Delete</a>
+    </p>
   {{else}}
-    not found
+    <h2>{{albumTitle}} not found</h2>
   {{/if}}
 </body>
 </html> 

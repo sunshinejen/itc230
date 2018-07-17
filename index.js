@@ -7,6 +7,7 @@ let handlebars = require("express-handlebars");
 
 app.set('port', process.env.PORT || 3000);
 app.use(express.static(__dirname + '/public')); 
+app.use(require("body-parser").urlencoded({extended:true}));
 
 app.engine(".html", handlebars({extname: '.html'}));
 app.set("view engine", ".html");
@@ -30,23 +31,30 @@ app.get('/about', (req, res) => {
 });
 */
 
-// define 404 handler
-
-
-app.post('/get', (req, res) => {
-  console.log(req.body); // display parsed form submission
-});
-
-
 //send content of home view
 app.get('/', (req, res) => {
     res.render('home', {music: music.getAll()});
 });
 
 app.get('/get', (req,res) => {
-   let result = music.get(req.query.title.toLowerCase());
-   res.render('details', {albumTitle: req.query.title, result:result})
+   let result = music.get(req.query.albumTitle.toLowerCase());
+   res.render('details', {albumTitle: req.query.albumTitle, result:result});
 });
+
+
+app.get('/delete', (req,res)=> {
+ let result = music.delete(req.query.albumTitle);
+ res.render('delete', {albumTitle: req.query.albumTitle, result:result});
+});
+
+//handle post
+app.post('/get', function(req,res){
+  console.log(req.body);
+  var found = music.get(req.body.title);
+  res.render("details",{albumTitle: req.body.title, result:found});
+  // display parsed form submission
+});
+
 
 app.use( (req,res) => {
  res.type('text/plain'); 

@@ -43,8 +43,11 @@ app.get('/get', (req,res) => {
 
 
 app.get('/delete', (req,res)=> {
- let result = music.delete(req.query.albumTitle);
- res.render('delete', {albumTitle: req.query.albumTitle, result:result});
+ console.log(req.query.albumTitle);
+
+ let dresult = music.delete(req.query.albumTitle.toLowerCase());
+console.log(dresult);
+ res.render('delete', {albumTitle: req.query.albumTitle, result:dresult});
 });
 
 //handle post

@@ -3,6 +3,7 @@ const music = require('./lib/albums.js');
 const express = require("express");
 const app = express();
 let handlebars = require("express-handlebars");
+var albumMethods = require("./models/albumMethods");
 
 
 app.set('port', process.env.PORT || 3000);
@@ -32,13 +33,21 @@ app.get('/about', (req, res) => {
 */
 
 //send content of home view
-app.get('/', (req, res) => {
-    res.render('home', {music: music.getAll()});
+app.get('/', (req, res, next) => {
+  albumMethods.getAll().then((items) => {
+    res.render('home', {albums: items }); 
+  }).catch((err) =>{
+    return next(err);
+  });
 });
 
-app.get('/get', (req,res) => {
-   let result = music.get(req.query.albumTitle.toLowerCase());
-   res.render('details', {albumTitle: req.query.albumTitle, result:result});
+
+app.get('/get', (req,res, next) => {
+   albumMethods.get( req.query.albumTitle.toLowerCase()).then((item) => {
+       res.render('details', {albumTitle: req.query.albumTitle, result:item});
+  }).catch((err) =>{
+    return next(err);
+  });
 });
 
 

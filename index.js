@@ -1,10 +1,10 @@
 'use strict'
-const music = require('./lib/albums.js');
+//const music = require('./lib/albums.js');
 const express = require("express");
 const app = express();
 let handlebars = require("express-handlebars");
 var albumMethods = require("./models/albumMethods");
-
+var album =  require("./models/album");
 
 app.set('port', process.env.PORT || 3000);
 app.use(express.static(__dirname + '/public')); 
@@ -23,50 +23,28 @@ app.get('/about', (req, res) => {
 res.sendFile(__dirname + '/public/about.html');
 });
 
-
-/*
- send plain text response
-app.get('/about', (req, res) => {
- res.type('text/plain');
- res.send('About page');
-});
-*/
-
 //send content of home view
-app.get('/', (req, res, next) => {
-  albumMethods.getAll().then((items) => {
-    res.render('home', {albums: items }); 
-  }).catch((err) =>{
-    return next(err);
-  });
-});
-
-
 app.get('/get', (req,res, next) => {
    albumMethods.get( req.query.albumTitle.toLowerCase()).then((item) => {
-       res.render('details', {albumTitle: req.query.albumTitle, result:item});
+       res.render('details', {result:item});
   }).catch((err) =>{
     return next(err);
   });
 });
 
-
-app.get('/delete', (req,res)=> {
+app.get('/delete', (req,res, next)=> {
  console.log(req.query.albumTitle);
-
- let dresult = music.delete(req.query.albumTitle.toLowerCase());
-console.log(dresult);
- res.render('delete', {albumTitle: req.query.albumTitle, result:dresult});
+ const dresult = req.query.albumTitle;
+ console.log(dresult);
+ albumMethods.delete(dresult).then((result) => {
+  album.count((err,count) => {
+   if (err) return next(err);
+  res.render('delete', {result: result.n, items:count, dresult:dresult});
+  });
+}).catch((err) => {
+ return next(err);
+ });
 });
-
-//handle post
-app.post('/get', function(req,res){
-  console.log(req.body);
-  var found = music.get(req.body.title);
-  res.render("details",{albumTitle: req.body.title, result:found});
-  // display parsed form submission
-});
-
 
 app.use( (req,res) => {
  res.type('text/plain'); 

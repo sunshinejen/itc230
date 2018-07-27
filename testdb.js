@@ -21,10 +21,3 @@ album.findOne({'artist':'Taylor Swift'}, (err, item) => {
   // other code here
 }); 
 
-// insert or update a single record
-var newAlbum = {'albumtitle':'1989', 'artist':'Taylor Swift', 'price': '11.99', 'qty':'3' }
-album.update({'albumtitle':'1989'}, newAlbum, {upsert:true}, (err, result) => {
-  if (err) return next(err);
-  console.log(result);
-  // other code here
-}); 

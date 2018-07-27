@@ -1,0 +1,1 @@
+module.exports.connectionString = "mongodb://jennv:Summer90@ds239911.mlab.com:39911/jensprojects"; 	

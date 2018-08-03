@@ -1,8 +1,8 @@
 <html>
 <body>
-  <h1>Details for {{albumTitle}}</h1>
+  <h1>Details for {{albumtitle}}</h1>
   {{#if result}}
-    <li>Album Name: {{result.albumTitle}}</li>
+    <li>Album Name: {{result.albumtitle}}</li>
     <li>Artist: {{result.artist}}</li>
     <li>Price: {{result.price}}</li>
     <li>Quantity: {{result.qty}}</li>
@@ -10,7 +10,7 @@
       <a href="/delete?albumTitle={{result.albumTitle}}">Delete</a>
     </p>
   {{else}}
-    <h2>{{albumTitle}} not found</h2>
+    <h2>{{albumtitle}} not found</h2>
   {{/if}}
 </body>
 </html> 

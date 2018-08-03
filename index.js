@@ -55,7 +55,6 @@ app.get('/delete', (req,res, next)=> {
 
 //api's
 
-/*
 app.get('/api/v1/ablum/:albumtitle', (req, res, next) => {
  let title = req.params.title;
  console.log(title);
@@ -89,7 +88,6 @@ app.post('/api/v1/add', (req,res, next) => {
     });
 });
 
-*/
 app.use( (req,res) => {
  res.type('text/plain'); 
  res.status(404);

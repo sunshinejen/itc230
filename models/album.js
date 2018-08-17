@@ -6,10 +6,10 @@ var conn = mongoose.connection;
 conn.on('error', console.error.bind(console, 'connection error:'));
 
 var mySchema = mongoose.Schema({
- albumtitle: { type: String, required: true },
+ title: { type: String, required: true },
  artist:{ type: String, required: true},
- price: Number,
- qty: Number,
+ price: String,
+ quantity: String,
 }); 
 
 module.exports = mongoose.model('Album', mySchema);
